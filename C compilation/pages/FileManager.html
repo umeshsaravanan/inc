@@ -1,0 +1,73 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Folders</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/files.css">
+</head>
+
+<body>
+    <div id="fileSection">
+        <div class="navbar">
+            <div class="left">
+                <h3><a href="FilesPage.html">Compiler</a></h3>
+                <h3><a>File Manager</a></h3>
+                <h3><a href="FolderAnalyser.html">Folder Analyser</a></h3>
+            </div>
+            <div class="right">
+                <div class="btns">
+                    <button class="btn file newfolder" onclick="newfile()">Upload Folder</button>
+                </div>
+                <div class="userDetails">
+                    <h3 id="username" style="width: 150px;text-align: center;">Welcome </h3>
+                    <button class="logout btn" onclick="handleSignOut()">Log out</button>
+                </div>
+            </div>
+        </div>
+        <div style="display: flex; gap: 2rem; justify-content: space-between; margin: 10px auto;width: 80%;">
+            <div id="breadcrumb" class="breadcrumb"></div>
+            <button class="btn history" onclick="handleHistory()" id="history">History</button>
+        </div>
+        <div class="heading">
+            <h4 onclick="sortByName(true)">Name</h4>
+            <h4>Date Modified</h4>
+            <h4>Type</h4>
+            <h4>Size <select id="MemoryUnit"
+                    style="background-color: transparent;outline: none;color: white;border: none;"
+                    onchange="changeMemoryUnit(event)">
+                    <option value="1" style="color: black;">KB</option>
+                    <option value="2" style="color: black;" id="mb">MB</option>
+                    <option value="6" style="color: black;" id="gb">GB</option>
+                    <option value="3" style="color: black;">1 to 16 KB</option>
+                    <option value="4" style="color: black;">Above 1 GB</option>
+                    <option value="5" style="color: black;">All</option>
+                </select></h4>
+        </div>
+        <p id="emptyMsg">Empty Folder</p>
+        <div class="folderSection" id="folderSection">
+
+        </div>
+        <div class="selectionSection">
+            <div id="selectionSection"></div>
+            <div id="selected"></div>
+        </div>
+    </div>
+    <div class="overlay" id="overLay">
+        <form id="folderInputForm" onsubmit="closeFileName(event)">
+            <label for="folder">Select Folder:</label>
+            <input type="file" name="folder" id="folder" webkitdirectory required>
+
+            <button class="btn submit" type="submit">Submit</button>
+            <button onclick="closee()" class="btn close" type="button">Close</button>
+        </form>
+    </div>
+    <div class="overlayUp" id="overlayUp">
+        <div class="uploading" id="uploading">Uploading...</div>
+        <button id="uploadBtn" class="upload btn" disabled onclick="closeUploading()">Close</button>
+    </div>
+    <script src="../js/folder.js"></script>
+</body>
+
+</html>

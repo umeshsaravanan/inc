@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folder Analyzer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/files.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="left">
+            <h3><a>Folder Analyser</a></h3>
+            <h3><a href="FileManager.html">File Manager</a></h3>
+        </div>
+        <div class="right">
+            <div class="userDetails">
+                <h3 id="username" style="width: 150px;text-align: center;">Welcome </h3>
+                <button class="logout btn" onclick="handleSignOut()">Log out</button>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 1rem; margin-top: 1rem; padding: .5rem; color: white;">
+        <div style="flex: 1;">
+            <select id="uploadType1" onchange="updateInputType('fileInput1', 'uploadType1')">
+                <option value="zip">Upload Zip</option>
+                <option value="folder">Upload Folder</option>
+            </select>
+            <input type="file" id="fileInput1" accept=".zip" style="display: inline-block;" onchange="document.getElementById('check1').style.display = 'none';">
+            <button class="btn" style="color: black;" onclick="handleSubmit('uploadType1', 'fileInput1', 'check1', 'uploading1', 'folder1Data')">Upload</button>
+            <p style="margin-left: 8px; display: inline-block;" id="uploading1"></p>
+            <i class="fa-solid fa-check" style="color: #63E6BE; display: none;" id="check1"></i>
+        </div>
+        <div style="flex: 1;">
+            <select id="uploadType2" onchange="updateInputType('fileInput2', 'uploadType2')">
+                <option value="zip">Upload Zip</option>
+                <option value="folder">Upload Folder</option>
+            </select>
+            <input type="file" id="fileInput2" accept=".zip" style="display: inline-block;" onchange="document.getElementById('check2').style.display = 'none';">
+            <button class="btn" style="color: black;" onclick="handleSubmit('uploadType2', 'fileInput2', 'check2', 'uploading2', 'folder2Data')">Upload</button>
+            <p style="margin-left: 8px; display: inline-block;" id="uploading2"></p>
+            <i class="fa-solid fa-check" style="color: #63E6BE; display: none;" id="check2"></i>
+        </div>
+    </div>
+
+    <div style="display: flex;justify-content: space-between; margin-bottom: 1rem">
+        <button class="btn" style="color: black; margin-left: .5rem;"
+        onclick="compareFolders()">Compare</button>
+        <button class="btn history" id="historyBtn" onclick="history()">History</button>
+    </div>
+    <div style="display: flex;gap: 1rem;">
+        <div class="heading" style="width: 100%;">
+            <h4 style="margin-left: 50px;">Name</h4>
+            <h4 style="margin-left: 290px;">Type</h4>
+            <h4 style="margin-right: 110px;">size
+                <select style="background-color: transparent;color: white; border: none;" id="selector1" onchange="handleUnitChange('selector1','selector2')">
+                    <option style="background-color: white;color: black;" value="0">(bytes)</option>
+                    <option style="background-color: white;color: black;" value="1" id="kb1">(KB)</option>
+                    <option style="background-color: white;color: black;" value="2" id="mb1">(MB)</option>
+                    <option style="background-color: white;color: black;" value="3" id="gb1">(GB)</option>
+                </select>
+            </h4>
+        </div>
+        <div class="heading" style="width: 100%;">
+            <h4 style="margin-left: 50px;">Name</h4>
+            <h4 style="margin-left: 290px;">Type</h4>
+            <h4 style="margin-right: 30px;">Size
+                <select style="background-color: transparent;color: white; border: none;" id="selector2" onchange="handleUnitChange('selector2','selector1')">
+                    <option style="background-color: white;color: black;" value="0">(bytes)</option>
+                    <option style="background-color: white;color: black;" value="1" id="kb2">(KB)</option>
+                    <option style="background-color: white;color: black;" value="2" id="mb2">(MB)</option>
+                    <option style="background-color: white;color: black;" value="3" id="gb2">(GB)</option>
+                </select>
+            </h4>
+            <h4>Difference</h4>
+        </div>
+    </div>
+    <div id="folderComparisor" style="display: flex;">
+        <div id="folder1" style="flex: 1;">
+
+        </div>
+        <div id="folder2" style="flex: 1;">
+
+        </div>
+    </div>
+    <h3 style="margin: .5rem; color: white;">Changes :</h3>
+    <div id="changes" style="color: white;"></div>
+
+    <div class="overlayUp" id="overlayUp">
+        <div class="uploading" id="uploading"></div>
+        <button id="uploadBtn" class="upload btn" disabled onclick="closeUploading()">Close</button>
+    </div>
+
+    <div class="historySection" id="historySection">
+        <button class="btn close" style="margin-bottom: .5rem; margin-left: 20rem;" onclick="document.getElementById('historySection').style.display = 'none'">Close</button>
+        <div style="display: flex;justify-content: space-between;border-bottom: 1px solid white;padding: 0px 4rem .5rem 1rem;">
+            <h4>Folder</h4>
+            <h4>Time</h4>
+        </div>
+        <div id="historyContent"></div>
+    </div>
+
+    <script src="../js/analyser.js"></script>
+</body>
+
+</html>
