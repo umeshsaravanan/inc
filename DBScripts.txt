@@ -1,0 +1,202 @@
+-- Table: public.filedetails
+
+-- DROP TABLE IF EXISTS public.filedetails;
+
+CREATE TABLE IF NOT EXISTS public.filedetails
+(
+    file_id integer NOT NULL DEFAULT nextval('filedetails_file_id_seq'::regclass),
+    programfile bytea,
+    file_name character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    user_id integer NOT NULL,
+    compiletime double precision,
+    memory integer,
+    access integer NOT NULL,
+    CONSTRAINT filedetails_pkey PRIMARY KEY (user_id, file_name),
+    CONSTRAINT filedetails_user_id_fkey FOREIGN KEY (user_id)
+        REFERENCES public.userdetails (user_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.filedetails
+    OWNER to postgres;
+
+
+
+-- Table: public.filestable
+
+-- DROP TABLE IF EXISTS public.filestable;
+
+CREATE TABLE IF NOT EXISTS public.filestable
+(
+    file_id integer NOT NULL DEFAULT nextval('filestable_file_id_seq'::regclass),
+    file_name character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    size double precision NOT NULL,
+    folder_id integer NOT NULL,
+    user_id integer NOT NULL,
+    date character varying(16) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT filestable_pkey PRIMARY KEY (file_id),
+    CONSTRAINT folder_id FOREIGN KEY (folder_id)
+        REFERENCES public.foldertable (folder_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.filestable
+    OWNER to postgres;
+
+
+
+-- Table: public.foldermapper
+
+-- DROP TABLE IF EXISTS public.foldermapper;
+
+CREATE TABLE IF NOT EXISTS public.foldermapper
+(
+    user_id integer NOT NULL,
+    folder_id integer NOT NULL,
+    CONSTRAINT foldermapper_pkey PRIMARY KEY (user_id, folder_id),
+    CONSTRAINT user_id FOREIGN KEY (user_id)
+        REFERENCES public.userdetails (user_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.foldermapper
+    OWNER to postgres;
+
+
+
+-- Table: public.foldertable
+
+-- DROP TABLE IF EXISTS public.foldertable;
+
+CREATE TABLE IF NOT EXISTS public.foldertable
+(
+    folder_id integer NOT NULL DEFAULT nextval('foldertable_folder_id_seq'::regclass),
+    folder_name character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    user_id integer NOT NULL,
+    parent_folder integer,
+    path character varying(1000) COLLATE pg_catalog."default" NOT NULL,
+    size double precision DEFAULT 0.0,
+    date character varying(16) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT foldertable_pkey PRIMARY KEY (folder_id),
+    CONSTRAINT user_id FOREIGN KEY (user_id)
+        REFERENCES public.userdetails (user_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.foldertable
+    OWNER to postgres;
+
+
+
+
+-- Table: public.historyfolders
+
+-- DROP TABLE IF EXISTS public.historyfolders;
+
+CREATE TABLE IF NOT EXISTS public.historyfolders
+(
+    f_id integer NOT NULL DEFAULT nextval('historyfolders_f_id_seq'::regclass),
+    user_id integer NOT NULL,
+    f_name character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    pf_id integer,
+    path character varying COLLATE pg_catalog."default" NOT NULL,
+    status character varying(15) COLLATE pg_catalog."default" NOT NULL,
+    size integer NOT NULL,
+    size_diff integer NOT NULL,
+    CONSTRAINT historyfolders_pkey PRIMARY KEY (f_id),
+    CONSTRAINT user_id FOREIGN KEY (user_id)
+        REFERENCES public.userdetails (user_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.historyfolders
+    OWNER to postgres;
+
+
+
+
+-- Table: public.historymapper
+
+-- DROP TABLE IF EXISTS public.historymapper;
+
+CREATE TABLE IF NOT EXISTS public.historymapper
+(
+    user_id integer NOT NULL,
+    f_id integer NOT NULL,
+    compared_date timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.historymapper
+    OWNER to postgres;
+
+
+
+
+-- Table: public.historyfiles
+
+-- DROP TABLE IF EXISTS public.historyfiles;
+
+CREATE TABLE IF NOT EXISTS public.historyfiles
+(
+    file_name character varying COLLATE pg_catalog."default" NOT NULL,
+    file_id integer NOT NULL DEFAULT nextval('hostoryfiles_file_id_seq'::regclass),
+    parent_id integer NOT NULL,
+    size integer NOT NULL,
+    size_diff integer NOT NULL,
+    status character(15) COLLATE pg_catalog."default" NOT NULL,
+    user_id integer NOT NULL,
+    CONSTRAINT hostoryfiles_pkey PRIMARY KEY (file_id),
+    CONSTRAINT parent_id FOREIGN KEY (parent_id)
+        REFERENCES public.historyfolders (f_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.historyfiles
+    OWNER to postgres;
+
+
+
+
+
+
+
+
+
+-- Table: public.userdetails
+
+-- DROP TABLE IF EXISTS public.userdetails;
+
+CREATE TABLE IF NOT EXISTS public.userdetails
+(
+    user_id integer NOT NULL DEFAULT nextval('userdetails_user_id_seq'::regclass),
+    user_name character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    password character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT userdetails_pkey PRIMARY KEY (user_id),
+    CONSTRAINT userdetails_user_name_key UNIQUE (user_name)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.userdetails
+    OWNER to postgres;
